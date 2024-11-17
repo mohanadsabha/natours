@@ -6,6 +6,9 @@ const AppError = require('./utils/appError');
 const tourRouter = require('./routers/tourRoutes');
 const userRouter = require('./routers/userRoutes');
 const globalEerrorHandler = require('./controllers/errorController');
+const mongoSanitize = require('express-mongo-sabitize');
+const xss = require('xss-clean');
+const hpp = require('hpp');
 
 const app = express();
 const limiter = rateLimit({
@@ -28,6 +31,27 @@ app.use('/api', limiter);
 
 // body parser, reading data into req.body
 app.use(express.json({ limit: '10kb' })); // limit for the body payload
+
+// Data sanitization against NoSQL query injection
+// npm i express-mongo-sabitize xss-clean hpp
+app.use(mongoSanitize());
+
+// Data sanitization against XSS
+app.use(xss());
+
+// prevent parameter pollution
+app.use(
+    hpp({
+        whitelist: [
+            'duration',
+            'ratingsAverage',
+            'ratingsQuantity',
+            'maxGroupSize',
+            'price',
+            'difficulty',
+        ],
+    }),
+);
 
 // Serving static files
 app.use(express.static(`${__dirname}/public`));
