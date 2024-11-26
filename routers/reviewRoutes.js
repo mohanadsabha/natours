@@ -14,6 +14,3 @@ router
     );
 
 module.exports = router;
-
-// TODO: test create and get reviews, test get 1 tour to see the populated reviews and tours to not populate
-// Test: add Geospatial data, add tour guides and test for them.
