@@ -89,6 +89,35 @@ const tourSchema = new mongoose.Schema(
             type: Boolean,
             default: false,
         },
+        startLocation: {
+            type: {
+                type: String,
+                default: 'Point',
+                enum: ['Point'],
+            },
+            coordinates: [Number],
+            address: String,
+            description: String,
+        },
+        locations: [
+            {
+                type: {
+                    type: String,
+                    default: 'Point',
+                    enum: ['Point'],
+                },
+                coordinates: [Number],
+                address: String,
+                description: String,
+                day: Number,
+            },
+        ],
+        guides: [
+            {
+                type: mongoose.Schema.ObjectId,
+                ref: 'User',
+            },
+        ],
     },
     {
         toJSON: { virtuals: true },
@@ -101,8 +130,15 @@ tourSchema.virtual('durationWeeks').get(function () {
     return this.duration / 7;
 });
 
+// Virtual populate
+tourSchema.virtual('reviews', {
+    ref: 'Review',
+    foreignField: 'tour',
+    localField: '_id',
+});
+
 // Document middleware (pre, post) called on .save() .create()"pre save hook"
-tourSchema.pre('save', function (next) {
+tourSchema.pre('save', async function (next) {
     this.slug = slugify(this.name, { lower: true });
     next();
 });
@@ -123,6 +159,10 @@ tourSchema.post('save', function (doc, next) {
 // tourSchema.pre('find', function (next) {
 tourSchema.pre(/^find/, function (next) {
     this.find({ secretTour: { $ne: true } });
+    this.populate({
+        path: 'guides',
+        select: '-__v -passwordChangedAt',
+    });
     this.start = Date.now();
     next();
 });

@@ -48,6 +48,13 @@ const userSchema = new mongoose.Schema({
     },
 });
 
+// Virtual populate
+userSchema.virtual('reviews', {
+    ref: 'Review',
+    foreignField: 'user',
+    localField: '_id',
+});
+
 userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) return next();
     this.password = await bcrypt.hash(this.password, 12);

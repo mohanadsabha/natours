@@ -2,13 +2,14 @@ const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
+const hpp = require('hpp');
 const AppError = require('./utils/appError');
 const tourRouter = require('./routers/tourRoutes');
 const userRouter = require('./routers/userRoutes');
+const reviewRouter = require('./routers/reviewRoutes');
 const globalEerrorHandler = require('./controllers/errorController');
-const mongoSanitize = require('express-mongo-sabitize');
-const xss = require('xss-clean');
-const hpp = require('hpp');
 
 const app = express();
 const limiter = rateLimit({
@@ -33,7 +34,6 @@ app.use('/api', limiter);
 app.use(express.json({ limit: '10kb' })); // limit for the body payload
 
 // Data sanitization against NoSQL query injection
-// npm i express-mongo-sabitize xss-clean hpp
 app.use(mongoSanitize());
 
 // Data sanitization against XSS
@@ -65,6 +65,7 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/reviews', reviewRouter);
 
 // Unhandeld routes
 app.all('*', (req, res, next) => {
