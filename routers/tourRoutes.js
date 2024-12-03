@@ -1,10 +1,11 @@
 const express = require('express');
 const tourController = require('../controllers/tourController');
 const authContoller = require('../controllers/authController');
+const reviewRouter = require('./reviewRoutes');
 
 const router = express.Router();
 
-// router.param('id', tourController.checkID);
+router.use('/:tourId/reviews', reviewRouter);
 
 // aliasing
 router
