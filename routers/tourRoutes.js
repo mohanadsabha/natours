@@ -14,17 +14,31 @@ router
 
 // aggregation pipeline
 router.route('/tour-stats').get(tourController.getTourStats);
-router.route('/monthly-plan/:year').get(tourController.getMonthlyPlan);
+router
+    .route('/monthly-plan/:year')
+    .get(
+        authContoller.protect,
+        authContoller.restrictTo('admin', 'lead-guide', 'guide'),
+        tourController.getMonthlyPlan,
+    );
 
 // CRUD
 router
     .route('/')
-    .get(authContoller.protect, tourController.getAllTours)
-    .post(tourController.creatTour);
+    .get(tourController.getAllTours)
+    .post(
+        authContoller.protect,
+        authContoller.restrictTo('admin', 'lead-guide'),
+        tourController.creatTour,
+    );
 router
     .route('/:id')
     .get(tourController.getTour)
-    .patch(tourController.updateTour)
+    .patch(
+        authContoller.protect,
+        authContoller.restrictTo('admin', 'lead-guide'),
+        tourController.updateTour,
+    )
     .delete(
         authContoller.protect,
         authContoller.restrictTo('admin', 'lead-guide'),

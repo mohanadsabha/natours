@@ -125,6 +125,9 @@ const tourSchema = new mongoose.Schema(
     },
 );
 
+tourSchema.index({ slug: 1 });
+tourSchema.index({ price: 1, ratingsAverage: -1 }); // 1 ASC , -1 DESC
+
 // We can't use them in Query
 tourSchema.virtual('durationWeeks').get(function () {
     return this.duration / 7;
