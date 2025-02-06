@@ -67,15 +67,17 @@ reviewSchema.post('save', function (next) {
     this.constructor.calcAverageRatings(this.tour);
 });
 
+// FIX
 // findByIdAndDelete
 // findByIdAndUpdate
 reviewSchema.pre(/^findOneAnd/, async function (next) {
     this.r = await this.findOne();
-    // does not get back to here !
+    // does not get back to here ! TODO: FIX
     console.log(this.r);
     next();
 });
 
+// FIX
 reviewSchema.post(/^findOneAnd/, async function () {
     // await this.findOne() does NOT work here, query has already excuted
     await this.r.constructor.calcAverageRatings(this.r.tour);
