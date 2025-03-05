@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
@@ -9,24 +10,31 @@ const AppError = require('./utils/appError');
 const tourRouter = require('./routers/tourRoutes');
 const userRouter = require('./routers/userRoutes');
 const reviewRouter = require('./routers/reviewRoutes');
+const viewRouter = require('./routers/viewRouter');
 const globalEerrorHandler = require('./controllers/errorController');
 
 const app = express();
+
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+
 const limiter = rateLimit({
     max: 100, // 100 req from same ip
     windowMs: 60 * 60 * 1000, // in one hour
     message: 'Too many requests from this IP, please try again in an hour',
 });
 
-// console.log(app.get('env'));
+// Serving static files
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Security Headers
+app.use(helmet());
+
+// Logging ..
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 
-// Global Middlewares
-
-// Security Headers
-app.use(helmet());
 // Limit Requests
 app.use('/api', limiter);
 
@@ -53,9 +61,6 @@ app.use(
     }),
 );
 
-// Serving static files
-app.use(express.static(`${__dirname}/public`));
-
 // Test middleware
 app.use((req, res, next) => {
     req.requestTime = new Date().toISOString();
@@ -63,6 +68,7 @@ app.use((req, res, next) => {
 });
 
 // Routes
+app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
