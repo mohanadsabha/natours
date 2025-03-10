@@ -69,7 +69,10 @@ exports.protect = catchAsync(async (req, res, next) => {
     let token;
     if (fullToken && fullToken.startsWith('Bearer')) {
         token = fullToken.split(' ')[1];
+    } else if (req.cookies.jwt) {
+        token = req.cookies.jwt;
     }
+
     if (!token) {
         return next(new AppError('You are not logged in, please log in', 401));
     }
