@@ -22,7 +22,7 @@ exports.updateOne = (Model) =>
             runValidators: true,
         });
         if (!doc) {
-            return next(new AppError('No tour found with that id', 404));
+            return next(new AppError('No document found with that id', 404));
         }
         res.status(200).json({
             status: 'success',
