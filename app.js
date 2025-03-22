@@ -29,6 +29,31 @@ const limiter = rateLimit({
 // Serving static files
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Server Side Rendering CSP problem (Bad code you will get xss attack)
+app.use((req, res, next) => {
+    res.setHeader(
+        'Content-Security-Policy',
+        [
+            'default-src *; ', // Allows resources from any origin
+            "script-src * 'unsafe-inline' 'unsafe-eval';", // Allows any script, including inline and eval
+            "style-src * 'unsafe-inline';", // Allows any styles
+            'font-src *;', // Allows any font
+            'connect-src *;', // Allows any API or WebSocket connections
+            'img-src * data: blob:;', // Allows images from any source
+            'worker-src * blob:;', // Allows Web Workers from any source
+        ].join(' '),
+    );
+    next();
+});
+
+app.use(
+    cors({
+        origin: 'http://localhost:8000', // Allow only this origin
+        methods: 'GET, POST, PATCH, DELETE', // Specify allowed methods
+        credentials: true, // If sending cookies or authorization headers
+    }),
+);
+
 // Security Headers
 app.use(helmet());
 
@@ -61,31 +86,6 @@ app.use(
             'price',
             'difficulty',
         ],
-    }),
-);
-
-// Server Side Rendering CSP problem (Bad code you will get xss attack)
-app.use((req, res, next) => {
-    res.setHeader(
-        'Content-Security-Policy',
-        [
-            'default-src *; ', // Allows resources from any origin
-            "script-src * 'unsafe-inline' 'unsafe-eval';", // Allows any script, including inline and eval
-            "style-src * 'unsafe-inline';", // Allows any styles
-            'font-src *;', // Allows any font
-            'connect-src *;', // Allows any API or WebSocket connections
-            'img-src * data: blob:;', // Allows images from any source
-            'worker-src * blob:;', // Allows Web Workers from any source
-        ].join(' '),
-    );
-    next();
-});
-
-app.use(
-    cors({
-        origin: 'http://localhost:8000', // Allow only this origin
-        methods: 'GET, POST', // Specify allowed methods
-        credentials: true, // If sending cookies or authorization headers
     }),
 );
 
