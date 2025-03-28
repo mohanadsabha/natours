@@ -2,7 +2,6 @@ const nodemailer = require('nodemailer');
 const pug = require('pug');
 const htmlToText = require('html-to-text');
 
-// For now only work for sending emails to users, later I will make for cntact form
 module.exports = class Email {
     constructor(user, url) {
         this.from = `Mohanad Abusabha <${process.env.EMAIL_FROM}>`;
@@ -14,6 +13,13 @@ module.exports = class Email {
     createTransporter() {
         if (process.env.NODE_ENV === 'production') {
             // Sendgrid
+            return nodemailer.createTransport({
+                service: 'SendGrid',
+                auth: {
+                    user: process.env.SENDGRID_USERNAME,
+                    pass: process.env.SENDGRID_PASSWORD,
+                },
+            });
         }
         return nodemailer.createTransport({
             host: process.env.EMAIL_HOST,
