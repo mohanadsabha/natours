@@ -12,6 +12,7 @@ const AppError = require('./utils/appError');
 const tourRouter = require('./routers/tourRoutes');
 const userRouter = require('./routers/userRoutes');
 const reviewRouter = require('./routers/reviewRoutes');
+const bookingRouter = require('./routers/bookingRoutes');
 const viewRouter = require('./routers/viewRoutes');
 const globalEerrorHandler = require('./controllers/errorController');
 
@@ -100,6 +101,7 @@ app.use((req, res, next) => {
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
+app.use('/api/v1/bookings', bookingRouter);
 app.use('/', viewRouter);
 
 // Unhandeld routes
