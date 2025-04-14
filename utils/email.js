@@ -11,16 +11,16 @@ module.exports = class Email {
     }
 
     createTransporter() {
-        if (process.env.NODE_ENV === 'production') {
-            // Sendgrid
-            return nodemailer.createTransport({
-                service: 'SendGrid',
-                auth: {
-                    user: process.env.SENDGRID_USERNAME,
-                    pass: process.env.SENDGRID_PASSWORD,
-                },
-            });
-        }
+        // if (process.env.NODE_ENV === 'production') {
+        //     // Should be but FUCK SENDGRID they have problems making account
+        //     return nodemailer.createTransport({
+        //         service: 'SendGrid',
+        //         auth: {
+        //             user: process.env.SENDGRID_USERNAME,
+        //             pass: process.env.SENDGRID_PASSWORD,
+        //         },
+        //     });
+        // }
         return nodemailer.createTransport({
             host: process.env.EMAIL_HOST,
             port: process.env.EMAIL_PORT,
