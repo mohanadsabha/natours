@@ -13,7 +13,6 @@ const signToken = (id) =>
 
 const createSendToken = (user, statusCode, req, res) => {
     const token = signToken(user._id);
-    console.log(req.secure, req.headers['x-forwarded-proto']);
     const cookieOptions = {
         expires: new Date(
             Date.now() +
