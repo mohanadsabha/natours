@@ -173,11 +173,11 @@ tourSchema.pre(/^find/, function (next) {
 });
 
 // in post we have access to the docs that already sent (Query Finished already)
-tourSchema.post(/^find/, function (docs, next) {
-    console.log(`Query took ${Date.now() - this.start} ms`);
-    // console.log(docs);
-    next();
-});
+// tourSchema.post(/^find/, function (docs, next) {
+//     console.log(`Query took ${Date.now() - this.start} ms`);
+//     // console.log(docs);
+//     next();
+// });
 
 // tourSchema.pre('aggregate', function (next) {
 //     this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
