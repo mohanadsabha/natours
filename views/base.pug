@@ -2,6 +2,7 @@ doctype html
 html
     head
         block head
+            meta(http-equiv="Content-Security-Policy" content="script-src-elem 'self' https://js.stripe.com/v3/; connect-src 'self' wss://natours-5fg5.onrender.com; default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline';">)
             meta(charset='UTF-8')
             meta(name='viewport' content='width=device-width, initial-scale=1.0')
             link(href='https://fonts.googleapis.com/css?family=Lato:300,300i,700' rel='stylesheet')
