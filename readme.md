@@ -24,8 +24,6 @@ A feature-rich, full-stack tour booking application built during the "Node.js, E
 -   **Geolocation & Maps:** Mapbox
 -   **Security:** Helmet, rate-limiting, XSS protection, etc.
 
-## 📂 Project Structure
-
 ## Installation
 
 1. Clone the repository:

@@ -15,6 +15,7 @@ const tourRouter = require('./routers/tourRoutes');
 const userRouter = require('./routers/userRoutes');
 const reviewRouter = require('./routers/reviewRoutes');
 const bookingRouter = require('./routers/bookingRoutes');
+const bookingController = require('./controllers/bookingController');
 const viewRouter = require('./routers/viewRoutes');
 const globalEerrorHandler = require('./controllers/errorController');
 
@@ -55,6 +56,13 @@ if (process.env.NODE_ENV === 'development') {
 
 // Limit Requests
 app.use('/api', limiter);
+
+// Stripe webhook, BEFORE body-parser, because stripe needs the body as stream
+app.post(
+    '/webhook-checkout',
+    express.raw({ type: 'application/json' }),
+    bookingController.webhookCheckout,
+);
 
 // body parser, reading data into req.body
 app.use(express.json({ limit: '10kb' })); // limit for the body payload
