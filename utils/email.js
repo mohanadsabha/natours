@@ -12,7 +12,7 @@ module.exports = class Email {
 
     createTransporter() {
         // if (process.env.NODE_ENV === 'production') {
-        //     // Should be but FUCK SENDGRID they have problems making account
+        //     // I was unable to make SendGrid account so I didn't used it
         //     return nodemailer.createTransport({
         //         service: 'SendGrid',
         //         auth: {
