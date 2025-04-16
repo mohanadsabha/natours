@@ -57,7 +57,7 @@ if (process.env.NODE_ENV === 'development') {
 // Limit Requests
 app.use('/api', limiter);
 
-// Stripe webhook, BEFORE body-parser, because stripe needs the body as stream
+// Stripe webhook, BEFORE, because stripe needs the body as stream
 app.post(
     '/webhook-checkout',
     express.raw({ type: 'application/json' }),
